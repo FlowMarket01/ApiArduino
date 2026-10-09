@@ -11,15 +11,12 @@
     <h1>Graphics</h1>
     <div style="display: flex;">
         <div style="width: 50%;">
-            <canvas id="sensorAnalogico"></canvas>
-        </div>
-        <div style="width: 50%;">
-            <canvas id="sensorDigital"></canvas>
+            <canvas id="sensorUltrassonico"></canvass>
         </div>
     </div>
 
     <script>
-        var sensorAnalogico = new Chart(document.getElementById('sensorAnalogico').getContext('2d'), {
+/*         var sensorAnalogico = new Chart(document.getElementById('sensorAnalogico').getContext('2d'), {
             type: 'line',
             data: {
                 datasets: [{
@@ -42,13 +39,13 @@
                     },
                 },
             }
-        });
+        }); */
 
-        var sensorDigital = new Chart(document.getElementById('sensorDigital').getContext('2d'), {
+        var sensorUltrassonico = new Chart(document.getElementById('sensorUltrassonico').getContext('2d'), {
             type: 'line',
             data: {
                 datasets: [{
-                    label: 'Digital',
+                    label: 'ultrassonico',
                     borderColor: '#63B1BC',
                     backgroundColor: '#0762C8'
                 }]
@@ -102,8 +99,8 @@
         }
 
         setInterval(() => {
-            obterDados(sensorAnalogico, 'analogico');
-            obterDados(sensorDigital, 'digital');
+            // obterDados(sensorAnalogico, 'analogico');
+            obterDados(sensorUltrassonico, 'ultrassonico');
         }, 1000);
 
     </script>

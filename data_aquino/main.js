@@ -1,4 +1,5 @@
-// importa os bibliotecas necessários
+let total = 0;
+
 const serialport = require('serialport');
 const express = require('express');
 const mysql = require('mysql2');
@@ -12,16 +13,16 @@ const HABILITAR_OPERACAO_INSERIR = true;
 
 // função para comunicação serial
 const serial = async (
-    //valoresSensorAnalogico,
-    valoresSensorUltrassonico
+    // valoresSensorAnalogico,
+    valorSensorUltrassonico,
 ) => {
 
     // conexão com o banco de dados MySQL
     let poolBancoDados = mysql.createPool(
         {
             host: 'localhost',
-            user: 'usuario_insert',
-            password: '123456',
+            user: 'flowmarket_api',
+            password: '1408Tech!',
             database: 'flowmarket',
             port: 3306
         }
@@ -50,23 +51,40 @@ const serial = async (
     // processa os dados recebidos do Arduino
     arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => {
         console.log(data);
+        // total += data;
+        // console.log(`Total: ${total}`)
         const valores = data.split(';');
+
+        // const sensorUltrassonico = total;
         const sensorUltrassonico = parseInt(valores[0]);
-        //const sensorAnalogico = parseFloat(valores[1]);
+        // const sensorAnalogico = parseFloat(valores[1]);
+        // const sensorRegiao = parseInt(valores[2]);
 
         // armazena os valores dos sensores nos arrays correspondentes
-       // valoresSensorAnalogico.push(sensorAnalogico);
-        valoresSensorUltrassonico.push(sensorUltrassonico);
+        // valoresSensorAnalogico.push(sensorAnalogico);
+        valorSensorUltrassonico.push(sensorUltrassonico);
 
         // insere os dados no banco de dados (se habilitado)
         if (HABILITAR_OPERACAO_INSERIR) {
 
-            // este insert irá inserir os dados na tabela "medida"
-            await poolBancoDados.execute(
-                'INSERT INTO medida (sensor_digita) VALUES (?)', // modificar aqui no banco 
-                [sensorUltrassonico] // ADICIONAR A FK POSTERIORMENTE
+            // este insert irá inserir os dados na tabela "leituraRegiaoFila"
+            if (valorRegiao == 0){
+                await poolBancoDados.execute(
+                'INSERT INTO leituraRegiaoFila (fk_idSensor, presenca) VALUES (?, ?)',
+                [1, sensorUltrassonico]
             );
-            console.log("valores inseridos no banco: ", + ", " + sensorUltrassonico);
+            } 
+            else 
+            {
+                // Este insert irá inserir os dados na tabela "leituraCorredor" 
+            /* await poolBancoDados.execute(
+                'INSERT INTO leituraCorredor (fk_idSensor, presenca) VALUES (?, ?)',
+                [1, sensorUltrassonico]
+            );
+            */
+            }
+        
+            console.log("valores inseridos no banco: " + sensorUltrassonico);
 
         }
 
@@ -80,8 +98,8 @@ const serial = async (
 
 // função para criar e configurar o servidor web
 const servidor = (
-    //valoresSensorAnalogico,
-    valoressensorUltrassonico
+    // valoresSensorAnalogico,
+    valorSensorUltrassonico
 ) => {
     const app = express();
 
@@ -98,29 +116,30 @@ const servidor = (
     });
 
     // define os endpoints da API para cada tipo de sensor
-  //  app.get('/sensores/analogico', (_, response) => {
-   //     return response.json(valoresSensorAnalogico);
+    //app.get('/sensores/analogico', (_, response) => {
+    //    return response.json(valoresSensorAnalogico);
     //});
-    app.get('/sensores/digital', (_, response) => {
-        return response.json(valoressensorUltrassonico);
+
+    app.get('/sensores/ultrassonico', (_, response) => {
+        return response.json(valorSensorUltrassonico);
     });
 }
 
 // função principal assíncrona para iniciar a comunicação serial e o servidor web
 (async () => {
     // arrays para armazenar os valores dos sensores
-    //const valoresSensorAnalogico = [];
-    const valoressensorUltrassonico = [];
+    // const valoresSensorAnalogico = [];
+    const valorSensorUltrassonico = [];
 
     // inicia a comunicação serial
     await serial(
-       // valoresSensorAnalogico,
-        valoressensorUltrassonico
+        // valoresSensorAnalogico,
+        valorSensorUltrassonico
     );
 
     // inicia o servidor web
     servidor(
-        //valoresSensorAnalogico,
-        valoressensorUltrassonico
+        // valoresSensorAnalogico,
+        valorSensorUltrassonico
     );
 })();
