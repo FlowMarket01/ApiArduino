@@ -51,13 +51,12 @@ const serial = async (
     // processa os dados recebidos do Arduino
     arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => {
         console.log(data);
-        // total += data;
-        // console.log(`Total: ${total}`)
         const valores = data.split(';');
 
         // const sensorUltrassonico = total;
         const sensorUltrassonico = parseInt(valores[0]);
-        // const sensorAnalogico = parseFloat(valores[1]);
+        const sensorID = parseInt(valores[1]);
+        const valorRegiao = parseInt(valores[2]);
         // const sensorRegiao = parseInt(valores[2]);
 
         // armazena os valores dos sensores nos arrays correspondentes
@@ -71,21 +70,20 @@ const serial = async (
             if (valorRegiao == 0){
                 await poolBancoDados.execute(
                 'INSERT INTO leituraRegiaoFila (fk_idSensor, presenca) VALUES (?, ?)',
-                [1, sensorUltrassonico]
+                [sensorID, sensorUltrassonico]
             );
             } 
             else 
             {
-                // Este insert irá inserir os dados na tabela "leituraCorredor" 
-            /* await poolBancoDados.execute(
+            // Este insert irá inserir os dados na tabela "leituraCorredor" 
+            await poolBancoDados.execute(
                 'INSERT INTO leituraCorredor (fk_idSensor, presenca) VALUES (?, ?)',
-                [1, sensorUltrassonico]
+                [sensorID, sensorUltrassonico]
             );
             */
             }
         
-            console.log("valores inseridos no banco: " + sensorUltrassonico);
-
+            console.log("valores inseridos no banco: " + sensorID + ' ' + sensorUltrassonico);
         }
 
     });
