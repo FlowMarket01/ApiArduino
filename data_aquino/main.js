@@ -80,7 +80,6 @@ const serial = async (
                 'INSERT INTO leituraCorredor (fk_idSensor, presenca) VALUES (?, ?)',
                 [sensorID, sensorUltrassonico]
             );
-            */
             }
         
             console.log("valores inseridos no banco: " + sensorID + ' ' + sensorUltrassonico);
