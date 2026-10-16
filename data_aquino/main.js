@@ -20,7 +20,7 @@ const serial = async (
             user: 'flowmarket_api',
             password: '1408Tech!',
             database: 'flowmarket',
-            port: 3306
+            port: 3307
         }
     ).promise();
 
