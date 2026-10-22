@@ -5,9 +5,9 @@ const express = require('express');
 const mysql = require('mysql2');
 
 const SERIAL_BAUD_RATE = 9600;
-const SERVIDOR_PORTA = 3306;
+const SERVIDOR_PORTA = 3300;
 
-const HABILITAR_OPERACAO_INSERIR = false;
+const HABILITAR_OPERACAO_INSERIR = true;
 
 const serial = async (
     valorSensorUltrassonico
@@ -44,6 +44,7 @@ const serial = async (
     arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => {
         console.log(data);
         const valores = data.split(';');
+        console.log(valores);
 
         const sensorUltrassonico = parseInt(valores[0]);
         const sensorID = parseInt(valores[1]);

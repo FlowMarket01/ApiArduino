@@ -6,14 +6,14 @@ int presenca;
 int id = 1;
 int regiao = 0;
 
-HC_SR04 sensor(pinoTrigger, pinoEcho);
+Ultrasonic sensor(pinoTrigger, pinoEcho);
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  float distancia = sensor.distance();
+  float distancia = sensor.read();
 
   if(distancia > 0 && distancia < 30){
     presenca = 1;
@@ -21,6 +21,10 @@ void loop() {
     presenca = 0;
   }
   
-  Serial.println(presenca+';'+id+';'+regiao);
+  Serial.print(presenca);
+  Serial.print(';');
+  Serial.print(id);
+  Serial.print(';');
+  Serial.println(regiao);
   delay(1000);
 }
