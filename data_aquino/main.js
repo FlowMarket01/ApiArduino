@@ -5,9 +5,9 @@ const express = require('express');
 const mysql = require('mysql2');
 
 const SERIAL_BAUD_RATE = 9600;
-const SERVIDOR_PORTA = 3300;
+const SERVIDOR_PORTA = 3306;
 
-const HABILITAR_OPERACAO_INSERIR = true;
+const HABILITAR_OPERACAO_INSERIR = false;
 
 const serial = async (
     valorSensorUltrassonico
