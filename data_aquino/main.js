@@ -42,7 +42,6 @@ const serial = async (
     });
 
     arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => {
-        console.log(data);
         const valores = data.split(';');
         console.log(valores);
 
@@ -53,7 +52,7 @@ const serial = async (
         valorSensorUltrassonico.push(sensorUltrassonico);
 
         if (HABILITAR_OPERACAO_INSERIR) {
-
+            console.log("valores inseridos no banco:  Valor de Presença(" + sensorUltrassonico + "), SensorID(" + sensorID + '), Região(' + valorRegiao + ')');
             // Este insert irá inserir os dados na tabela "leituraRegiaoFila"
             if (valorRegiao == 0){
                 await poolBancoDados.execute(
@@ -70,7 +69,6 @@ const serial = async (
             );
             }
         
-            console.log("valores inseridos no banco: " + sensorID + ' ' + sensorUltrassonico);
         }
 
     });
