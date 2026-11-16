@@ -47,29 +47,16 @@ const serial = async (
 
         const sensorUltrassonico = parseInt(valores[0]);
         const sensorID = parseInt(valores[1]);
-        const valorRegiao = parseInt(valores[2]);
 
         valorSensorUltrassonico.push(sensorUltrassonico);
 
         if (HABILITAR_OPERACAO_INSERIR) {
             console.log("valores inseridos no banco:  Valor de Presença(" + sensorUltrassonico + "), SensorID(" + sensorID + '), Região(' + valorRegiao + ')');
             // Este insert irá inserir os dados na tabela "leituraRegiaoFila"
-            if (valorRegiao == 0){
                 await poolBancoDados.execute(
-                'INSERT INTO leituraRegiaoFila (fk_idSensor, presenca) VALUES (?, ?)',
+                'INSERT INTO leitura (fk_sensor, valor_leitura) VALUES (?, ?)',
                 [sensorID, sensorUltrassonico]
             );
-            } 
-            else 
-            {
-            // Este insert irá inserir os dados na tabela "leituraCorredor" 
-            await poolBancoDados.execute(
-                'INSERT INTO leituraCorredor (fk_idSensor, presenca) VALUES (?, ?)',
-                [sensorID, sensorUltrassonico]
-            );
-            }
-        
-        }
 
     });
 

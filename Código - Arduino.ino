@@ -24,7 +24,5 @@ void loop() {
   Serial.print(presenca);
   Serial.print(';');
   Serial.print(id);
-  Serial.print(';');
-  Serial.println(regiao);
   delay(1000);
 }
