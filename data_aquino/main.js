@@ -16,7 +16,7 @@ const serial = async (
     // conexão com o banco de dados MySQL
     let poolBancoDados = mysql.createPool(
         {
-            host: 'localhost',
+            host: '10.18.32.50',
             user: 'flowmarket_api',
             password: '1408Tech!',
             database: 'flowmarket',
@@ -51,19 +51,21 @@ const serial = async (
         valorSensorUltrassonico.push(sensorUltrassonico);
 
         if (HABILITAR_OPERACAO_INSERIR) {
-            console.log("valores inseridos no banco:  Valor de Presença(" + sensorUltrassonico + "), SensorID(" + sensorID + '), Região(' + valorRegiao + ')');
+            console.log("valores inseridos no banco:  Valor de Presença(" + sensorUltrassonico + "), SensorID(" + sensorID + ")");
             // Este insert irá inserir os dados na tabela "leituraRegiaoFila"
                 await poolBancoDados.execute(
-                'INSERT INTO leitura (fk_sensor, valor_leitura) VALUES (?, ?)',
+                'INSERT INTO leituraRegiaoFila (fk_idsensor, presenca) VALUES (?, ?)',
                 [sensorID, sensorUltrassonico]
             );
 
-    });
+    }
+});
 
     arduino.on('error', (mensagem) => {
         console.error(`Erro no arduino (Mensagem: ${mensagem}`)
     });
 }
+
 
 const servidor = (
     valorSensorUltrassonico
